@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Michael's Fonts</title>
+<meta name="description" content="Browse, preview, and buy fonts from Michael's Fonts. No accounts required. Fonts delivered by email after purchase.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1><a href="index.html">Michael's Fonts</a></h1>
+  <nav>
+    <a href="licensing/">licensing</a>
+    <a href="terms/">terms</a>
+    <a href="privacy/">privacy</a>
+    <a href="about/">about</a>
+    <a href="blog/">blog</a>
+  </nav>
+</div>
+
+<!-- SEARCH -->
+<div class="search-bar">
+  <input type="text" placeholder="search fonts..." id="searchInput">
+  <button onclick="filterFonts()">search</button>
+  <div class="filter-links">
+    filter:
+    <a href="#" data-price="all" onclick="filterByPrice('all'); return false;">all</a>
+    <a href="#" data-price="free" onclick="filterByPrice('free'); return false;">free</a>
+    <a href="#" data-price="paid" onclick="filterByPrice('paid'); return false;">paid</a>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="categories" id="categories"></div>
+
+<!-- LISTINGS -->
+<div class="listings" id="listings">
+  </div>
+
+<!-- DETAIL OVERLAY -->
+<div class="detail-overlay" id="detailOverlay" onclick="if(event.target===this)closeDetail()">
+  <div class="detail-panel" id="detailPanel">
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Michael's Fonts · <a href="mailto:mail@michaelsfonts.com">mail@michaelsfonts.com</a>
+</div>
+
+<script>
+const fonts = [
+  {
+    name: "Flick Sans",
+    designer: "Michael Seh",
+    family: "'Flick Sans', sans-serif",
+    category: "sans-serif",
+    price: 5,
+    license: "Proprietary",
+    styles: 1,
+    variable: false,
+    date: "Mar 13",
+    desc: "A sans-serif with tapered, flicked stroke endings.",
+    tags: ["sans-serif"],
+    buyLink: "https://buy.stripe.com/3cI00kfv7ayWdevbZ087K04",
+    buyNote: "Includes Regular \u00b7 OTF + WOFF2 \u00b7 Desktop + web use"
+  },
+  {
+    name: "Select All",
+    designer: "Michael Seh",
+    family: "'Select All', serif",
+    category: "serif",
+    price: 0,
+    license: "SIL Open Font License 1.1",
+    styles: 1,
+    variable: false,
+    date: "Mar 11",
+    desc: "A color font based on EB Garamond where every glyph appears permanently text-selected. White letterforms on blue highlight rectangles.",
+    tags: ["serif"],
+    buyLink: "https://michaelsfonts.com/SelectAll-v1.2.zip",
+    buyNote: "Includes Regular \u00b7 TTF + WOFF2 \u00b7 Desktop + web use \u00b7 SIL OFL"
+  },
+  {
+    name: "Ricing",
+    designer: "Michael's Fonts",
+    family: "'Ricing', sans-serif",
+    category: "food",
+    price: 5,
+    license: "Proprietary",
+    styles: 9,
+    variable: true,
+    axes: "wght 100\u2013900",
+    weightMin: 100,
+    weightMax: 900,
+    weightDefault: 400,
+    date: "Mar 10",
+    desc: "Every letter is composed of rice grain tapered ovals.",
+    tags: ["food", "variable"],
+    buyLink: "https://buy.stripe.com/aFa14o3Mp6iG1vN7IK87K03",
+    buyNote: "Includes Thin \u00b7 ExtraLight \u00b7 Light \u00b7 Regular \u00b7 Medium \u00b7 SemiBold \u00b7 Bold \u00b7 ExtraBold \u00b7 Black \u00b7 Variable OTF + TTF + WOFF2 \u00b7 Desktop + web use"
+  },
+  {
+    name: "Fart Nouveau",
+    designer: "Michael Seh",
+    family: "'Fart Nouveau', serif",
+    category: "serif",
+    price: 0,
+    license: "SIL Open Font License 1.1",
+    styles: 1,
+    variable: false,
+    date: "Mar 9",
+    desc: "Handwritten serif that smells like 1890s Paris.",
+    tags: ["serif", "handwritten"],
+    buyLink: "https://michaelsfonts.com/Fart-Nouveau.zip",
+    buyNote: "Includes Regular · OTF + WOFF2 · Desktop + web use · SIL OFL"
+  },
+  {
+    name: "Pixel Caslon",
+    designer: "Michael Seh",
+    family: "'Pixel Caslon', serif",
+    category: "pixel",
+    price: 5,
+    license: "Proprietary",
+    styles: 1,
+    variable: false,
+    date: "Mar 7",
+    desc: "A display typeface that renders the proportions of William Caslon\u2019s 18th-century Roman types on a visible pixel grid. Every glyph is constructed from filled rectangles aligned to a 64-unit grid on a 1024 UPM canvas. There are no curves or sub-pixel positions. Every contour is a staircase, every serif is a stepped bracket. The result is a font that is unmistakably pixelated yet retains the stroke contrast, oblique stress, and bracketed serifs that define the Caslon style.",
+    tags: ["serif", "pixel"],
+    buyLink: "https://buy.stripe.com/3cI5kE0Ad22qeizd3487K02",
+    buyNote: "Includes Regular \u00b7 TTF + WOFF2 \u00b7 Desktop + web use"
+  },
+  {
+    name: "???",
+    designer: "Michael's Fonts",
+    family: "serif",
+    category: "serif",
+    price: 0,
+    license: "?",
+    styles: "?",
+    variable: false,
+    date: "???",
+    desc: "Something new is in the works. Stay tuned.",
+    tags: ["serif"],
+    comingSoon: true
+  },
+];
+
+const previewText = "The quick brown fox jumps over the lazy dog";
+let currentFilter = { category: 'all', price: 'all', search: '' };
+
+function renderListings() {
+  const container = document.getElementById('listings');
+  const filtered = fonts.filter(f => {
+    if (currentFilter.category === 'variable' && !f.variable) return false;
+    if (currentFilter.category !== 'all' && currentFilter.category !== 'variable' && f.category !== currentFilter.category && !f.tags.includes(currentFilter.category)) return false;
+    if (currentFilter.price === 'free' && (f.price > 0 || f.comingSoon)) return false;
+    if (currentFilter.price === 'paid' && (f.price === 0 || f.comingSoon)) return false;
+    if (currentFilter.search) {
+      const q = currentFilter.search.toLowerCase();
+      if (!f.name.toLowerCase().includes(q) && !f.tags.some(t => t.toLowerCase() === q) && f.category.toLowerCase() !== q) return false;
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div style="padding:24px;color:#888;">no fonts found.</div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map((f, i) => `
+    <div class="listing${f.comingSoon ? ' coming-soon' : ''}" data-index="${fonts.indexOf(f)}"${f.comingSoon ? '' : ` onclick="openDetail(${fonts.indexOf(f)})"`}>
+      <div class="listing-top">
+        <div class="listing-title">${f.comingSoon ? f.name : `<a href="#" onclick="event.stopPropagation(); openDetail(${fonts.indexOf(f)}); return false;">${f.name}</a>`}</div>
+        ${f.comingSoon ? '<div class="listing-soon">coming soon</div>' : (f.price === 0 ? '<div class="listing-free">free</div>' : '<div class="listing-price">$' + f.price + '</div>')}
+        <div class="listing-meta">${f.date} &middot; ${f.comingSoon ? '? styles' : (f.variable ? 'variable' : f.styles + ' style' + (f.styles > 1 ? 's' : ''))}</div>
+      </div>
+      <div class="listing-preview" style="font-family: ${f.family};${f.comingSoon ? ' opacity:0.4;' : ''}">${previewText}</div>
+      <div class="listing-tags">
+        ${[...f.tags].sort((a, b) => {
+          const priority = ['serif', 'sans-serif', 'variable'];
+          const ai = priority.indexOf(a), bi = priority.indexOf(b);
+          if (ai !== -1 && bi !== -1) return ai - bi;
+          if (ai !== -1) return -1;
+          if (bi !== -1) return 1;
+          return 0;
+        }).map(t => `<a href="#" class="tag" onclick="event.stopPropagation(); filterByTag('${t}'); return false;">${t}</a>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterByCategory(cat) {
+  currentFilter.category = cat;
+  if (cat === 'all') {
+    currentFilter.price = 'all';
+    updatePriceLinks();
+  }
+  renderCategories();
+  renderListings();
+}
+
+function filterByPrice(p) {
+  currentFilter.price = p;
+  if (p === 'all') {
+    currentFilter.category = 'all';
+    renderCategories();
+  }
+  updatePriceLinks();
+  renderListings();
+}
+
+function filterByTag(tag) {
+  currentFilter.search = tag;
+  currentFilter.category = 'all';
+  currentFilter.price = 'all';
+  document.getElementById('searchInput').value = tag;
+  renderCategories();
+  updatePriceLinks();
+  renderListings();
+}
+
+function filterFonts() {
+  currentFilter.search = document.getElementById('searchInput').value.trim();
+  renderListings();
+}
+
+function renderCategories() {
+  const container = document.getElementById('categories');
+  const counts = {};
+  fonts.forEach(f => {
+    counts[f.category] = (counts[f.category] || 0) + 1;
+    f.tags.forEach(t => { if (t !== f.category && t !== 'free') counts[t] = (counts[t] || 0) + 1; });
+  });
+  const categoryOrder = ['serif', 'sans-serif', 'variable', 'food', 'pixel', 'handwritten', 'mashup'];
+  const orderedCats = categoryOrder.filter(cat => counts[cat]);
+  // include any categories not in the predefined order (before handwritten)
+  Object.keys(counts).forEach(cat => { if (!orderedCats.includes(cat)) orderedCats.splice(orderedCats.length - 1, 0, cat); });
+  container.innerHTML = '<a href="#" class="' + (currentFilter.category === 'all' ? 'active' : '') + '" onclick="filterByCategory(\'all\'); return false;">all</a>' +
+    orderedCats.map(cat =>
+      '<a href="#" class="' + (currentFilter.category === cat ? 'active' : '') + '" onclick="filterByCategory(\'' + cat + '\'); return false;">' + cat + ' <span class="count">(' + counts[cat] + ')</span></a>'
+    ).join('');
+}
+
+function updatePriceLinks() {
+  document.querySelectorAll('.filter-links a[data-price]').forEach(a => {
+    a.classList.toggle('active', a.dataset.price === currentFilter.price);
+  });
+}
+
+document.getElementById('searchInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') filterFonts();
+});
+
+function openDetail(index) {
+  const f = fonts[index];
+  if (f.comingSoon) return;
+  const panel = document.getElementById('detailPanel');
+
+  panel.innerHTML = `
+    <a href="#" class="back-link" onclick="closeDetail(); return false;">← back to fonts</a>
+    <h2>${f.name}</h2>
+    <div class="detail-designer">${f.license} &middot; ${f.variable ? 'variable' : f.styles + ' style' + (f.styles > 1 ? 's' : '')}</div>
+    <div class="detail-preview" id="varPreview" style="font-family: ${f.family};">
+      <input class="detail-preview-input" id="varPreviewInput" style="font-family: ${f.family};" value="Type something here..." onfocus="if(this.value==='Type something here...')this.value=''" onblur="if(!this.value)this.value='Type something here...'">
+    </div>
+    ${f.variable ? `
+    <div class="variable-controls">
+      <label>
+        <b>Weight</b>
+        <input type="range" id="weightSlider" min="${f.weightMin || 100}" max="${f.weightMax || 900}" value="${f.weightDefault || 400}" oninput="
+          document.getElementById('varPreview').style.fontWeight = this.value;
+          document.getElementById('varPreviewInput').style.fontWeight = this.value;
+          document.getElementById('weightVal').textContent = this.value;
+        ">
+        <span class="val" id="weightVal">${f.weightDefault || 400}</span>
+      </label>
+    </div>
+    ` : ''}
+    <div class="detail-info">
+      ${f.desc}<br><br>
+      <span>Category:</span> ${f.category}<br>
+      ${f.variable ? '<span>Type:</span> variable<br><span>Axes:</span> ' + f.axes + '<br>' : '<span>Styles:</span> ' + f.styles + '<br>'}
+      <span>License:</span> ${f.license}<br>
+      <span>Tags:</span> ${[...f.tags].sort((a, b) => {
+          const order = ['serif', 'sans-serif', 'variable', 'food', 'pixel', 'handwritten', 'mashup'];
+          const ai = order.indexOf(a), bi = order.indexOf(b);
+          if (ai !== -1 && bi !== -1) return ai - bi;
+          if (ai !== -1) return -1;
+          if (bi !== -1) return 1;
+          return 0;
+        }).join(', ')}
+    </div>
+    <div class="buy-section">
+      ${f.price === 0
+        ? `<a href="${f.buyLink || '#'}" class="buy-btn free"${f.buyLink ? '' : ' onclick="return false;"'}>Download free ↓</a>`
+        : `<div class="buy-price">$${f.price}</div><a href="${f.buyLink || '#'}" class="buy-btn"${f.buyLink ? '' : ' onclick="return false;"'}>Buy now →</a>`
+      }
+    </div>
+    ${f.price !== 0 ? `<div style="font-size: 12px; color: #888; margin-top: 8px;">After purchase, I will email you the font files.</div>` : `<div style="font-size: 12px; color: #888; margin-top: 8px;">Click to download the font files directly.</div>`}
+    ${f.buyNote ? `<div style="font-size: 12px; color: #888; margin-top: 8px;">${f.buyNote}</div>` : ''}
+  `;
+
+  document.getElementById('detailOverlay').classList.add('active');
+}
+
+function closeDetail() {
+  document.getElementById('detailOverlay').classList.remove('active');
+}
+
+renderCategories();
+updatePriceLinks();
+renderListings();
+</script>
+
+</body></html>
