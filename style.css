@@ -586,6 +586,13 @@ a:hover, a:active { text-decoration: none; }
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Annex';
+  src: url('Annex/WOFF2/Annex-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
 @media (max-width: 600px) {
   .header { padding: 12px 16px; }
   .search-bar { padding: 8px 16px; flex-wrap: wrap; }
