@@ -53,6 +53,21 @@
 <script>
 const fonts = [
   {
+    name: "Font Lice",
+    designer: "Michael Seh",
+    family: "'Font Lice', serif",
+    category: "serif",
+    price: 0,
+    license: "SIL Open Font License 1.1",
+    styles: 1,
+    variable: false,
+    date: "Mar 20",
+    desc: "A display serif with an infestation. Small emoji icons attach themselves to letterforms at their most structurally vulnerable points. Hairline strokes, serif tips, terminals, and curve junctions all become host sites for digital organisms.",
+    tags: ["serif", "wtf"],
+    buyLink: "https://michaelsfonts.com/FontLice-v1.0.zip",
+    buyNote: "Includes Regular \u00b7 OTF + WOFF2 \u00b7 Desktop + web use \u00b7 SIL OFL"
+  },
+  {
     name: "Annex",
     designer: "Michael Seh",
     family: "'Annex', sans-serif",
@@ -248,7 +263,7 @@ function renderCategories() {
     counts[f.category] = (counts[f.category] || 0) + 1;
     f.tags.forEach(t => { if (t !== f.category && t !== 'free') counts[t] = (counts[t] || 0) + 1; });
   });
-  const categoryOrder = ['serif', 'sans-serif', 'variable', 'food', 'pixel', 'handwritten', 'mashup'];
+  const categoryOrder = ['serif', 'sans-serif', 'variable', 'food', 'pixel', 'handwritten', 'fun', 'mashup'];
   const orderedCats = categoryOrder.filter(cat => counts[cat]);
   // include any categories not in the predefined order (before handwritten)
   Object.keys(counts).forEach(cat => { if (!orderedCats.includes(cat)) orderedCats.splice(orderedCats.length - 1, 0, cat); });
