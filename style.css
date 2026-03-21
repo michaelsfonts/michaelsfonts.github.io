@@ -552,14 +552,6 @@ a:hover, a:active { text-decoration: none; }
 
 /* ===== FONT FACE ===== */
 @font-face {
-  font-family: 'Flick Sans';
-  src: url('FlickSans/WOFF2/FlickSans-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-}
-
-
-@font-face {
   font-family: 'Pixel Caslon';
   src: url('PixelCaslon/WOFF2/PixelCaslon-Regular.woff2') format('woff2');
   font-weight: 400;
