@@ -53,6 +53,21 @@
 <script>
 const fonts = [
   {
+    name: "Stick On",
+    designer: "Michael Seh",
+    family: "'Stick On', monospace",
+    category: "sans-serif",
+    price: 0,
+    license: "SIL Open Font License 1.1",
+    styles: 1,
+    variable: false,
+    date: "Aug 16",
+    desc: "The stick-on vinyl numbers from the hardware store, turned into a font. A numeral font, 0–9. Monospaced, one slot per digit. Skinny 1, fat 8, same box.",
+    tags: ["sans-serif", "numeral"],
+    buyLink: "https://github.com/michaelsfonts/Stick-On",
+    buyNote: "Numerals 0–9 · OTF + TTF + WOFF2 + WOFF · Desktop + web use · SIL OFL · on GitHub"
+  },
+  {
     name: "Autocorrect",
     designer: "Michael Seh",
     family: "'Autocorrect', sans-serif",
@@ -178,6 +193,21 @@ const fonts = [
 ];
 
 const previewText = "The quick brown fox jumps over the lazy dog";
+
+// Stick On is digits-only, so it previews with Los Angeles area codes,
+// a different random set on each page load.
+const laAreaCodes = ["213", "323", "310", "424", "818", "747", "626", "661", "562", "949"];
+function randomAreaCodes(n) {
+  return [...laAreaCodes].sort(() => Math.random() - 0.5).slice(0, n).join("  ");
+}
+(function () {
+  const stickOn = fonts.find(f => f.name === "Stick On");
+  if (stickOn) {
+    stickOn.previewText = randomAreaCodes(3);
+    stickOn.inputDefault = randomAreaCodes(1);
+  }
+})();
+
 let currentFilter = { category: 'all', price: 'all', search: '' };
 
 function renderListings() {
@@ -206,7 +236,7 @@ function renderListings() {
         ${f.comingSoon ? '<div class="listing-soon">coming soon</div>' : (f.price === 0 ? '<div class="listing-free">free</div>' : '<div class="listing-price">$' + f.price + '</div>')}
         <div class="listing-meta">${f.date} &middot; ${f.comingSoon ? '? styles' : (f.variable ? 'variable' : f.styles + ' style' + (f.styles > 1 ? 's' : ''))}</div>
       </div>
-      <div class="listing-preview" style="font-family: ${f.family};${f.comingSoon ? ' opacity:0.4;' : ''}">${previewText}</div>
+      <div class="listing-preview" style="font-family: ${f.family};${f.comingSoon ? ' opacity:0.4;' : ''}">${f.previewText || previewText}</div>
       <div class="listing-tags">
         ${[...f.tags].sort((a, b) => {
           const priority = ['serif', 'sans-serif', 'variable'];
@@ -263,7 +293,7 @@ function renderCategories() {
     counts[f.category] = (counts[f.category] || 0) + 1;
     f.tags.forEach(t => { if (t !== f.category && t !== 'free') counts[t] = (counts[t] || 0) + 1; });
   });
-  const categoryOrder = ['serif', 'sans-serif', 'variable', 'food', 'pixel', 'handwritten', 'fun', 'mashup'];
+  const categoryOrder = ['serif', 'sans-serif', 'numeral', 'variable', 'food', 'pixel', 'handwritten', 'fun', 'mashup'];
   const orderedCats = categoryOrder.filter(cat => counts[cat]);
   // include any categories not in the predefined order (before handwritten)
   Object.keys(counts).forEach(cat => { if (!orderedCats.includes(cat)) orderedCats.splice(orderedCats.length - 1, 0, cat); });
@@ -287,6 +317,7 @@ function openDetail(index) {
   const f = fonts[index];
   if (f.comingSoon) return;
   const panel = document.getElementById('detailPanel');
+  const ph = f.inputDefault || 'Type something here...';
 
   panel.innerHTML = `
     <a href="#" class="back-link" onclick="closeDetail(); return false;">← back to fonts</a>
@@ -299,7 +330,7 @@ function openDetail(index) {
           el.textContent=text;
           if(text){var range=document.createRange(); range.setStart(el.firstChild,Math.min(pos,text.length)); range.collapse(true); sel.removeAllRanges(); sel.addRange(range);}
         ">Type something here...</div>`
-        : `<input class="detail-preview-input" id="varPreviewInput" style="font-family: ${f.family};" value="Type something here..." onfocus="if(this.value==='Type something here...')this.value=''" onblur="if(!this.value)this.value='Type something here...'">`
+        : `<input class="detail-preview-input" id="varPreviewInput" style="font-family: ${f.family};" value="${ph}" onfocus="if(this.value==='${ph}')this.value=''" onblur="if(!this.value)this.value='${ph}'">`
       }
     </div>
     ${f.variable ? `
