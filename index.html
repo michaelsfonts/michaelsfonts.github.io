@@ -194,17 +194,35 @@ const fonts = [
 
 const previewText = "The quick brown fox jumps over the lazy dog";
 
-// Stick On is digits-only, so it previews with Los Angeles area codes,
-// a different random set on each page load.
-const laAreaCodes = ["213", "323", "310", "424", "818", "747", "626", "661", "562", "949"];
-function randomAreaCodes(n) {
-  return [...laAreaCodes].sort(() => Math.random() - 0.5).slice(0, n).join("  ");
+// Stick On is digits-only, so it previews with famous Los Angeles ZIP codes:
+// Downtown, Echo Park, Chinatown, Koreatown, and areas nearby. A different
+// random set on each page load.
+const laZipCodes = [
+  "90012", // Chinatown / Civic Center
+  "90013", // Historic Core, DTLA
+  "90014", // Fashion District, DTLA
+  "90015", // South Park / LA Live, DTLA
+  "90021", // Arts District, DTLA
+  "90026", // Echo Park
+  "90027", // Los Feliz
+  "90029", // East Hollywood
+  "90039", // Silver Lake / Atwater
+  "90057", // Westlake / MacArthur Park
+  "90005", // Koreatown
+  "90006", // Koreatown / Pico-Union
+  "90010", // Koreatown / Wilshire Center
+  "90020", // Koreatown
+  "90031", // Lincoln Heights
+  "90033", // Boyle Heights
+];
+function randomZips(n) {
+  return [...laZipCodes].sort(() => Math.random() - 0.5).slice(0, n).join("  ");
 }
 (function () {
   const stickOn = fonts.find(f => f.name === "Stick On");
   if (stickOn) {
-    stickOn.previewText = randomAreaCodes(3);
-    stickOn.inputDefault = randomAreaCodes(1);
+    stickOn.previewText = randomZips(2);
+    stickOn.inputDefault = randomZips(1);
   }
 })();
 
