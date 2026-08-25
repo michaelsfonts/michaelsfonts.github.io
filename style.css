@@ -328,17 +328,6 @@ a:hover, a:active { text-decoration: none; }
   text-overflow: ellipsis;
 }
 
-.detail-panel .detail-preview-input[contenteditable]:empty::before {
-  content: attr(data-placeholder);
-  color: #888;
-  pointer-events: none;
-}
-
-/* On focus, keep a line box so the caret shows, but hide the placeholder text */
-.detail-panel .detail-preview-input[contenteditable]:empty:focus::before {
-  content: "\200b";
-}
-
 .detail-info {
   font-size: 13px;
   line-height: 1.8;
