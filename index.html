@@ -9,7 +9,6 @@
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <h1><a href="index.html">Michael's Fonts</a></h1>
   <nav>
@@ -21,7 +20,6 @@
   </nav>
 </div>
 
-<!-- SEARCH -->
 <div class="search-bar">
   <input type="text" placeholder="search fonts..." id="searchInput">
   <button onclick="filterFonts()">search</button>
@@ -33,20 +31,16 @@
   </div>
 </div>
 
-<!-- CATEGORIES -->
 <div class="categories" id="categories"></div>
 
-<!-- LISTINGS -->
 <div class="listings" id="listings">
   </div>
 
-<!-- DETAIL OVERLAY -->
 <div class="detail-overlay" id="detailOverlay" onclick="if(event.target===this)closeDetail()">
   <div class="detail-panel" id="detailPanel">
   </div>
 </div>
 
-<!-- FOOTER -->
 <div class="footer">
   Michael's Fonts · <a href="mailto:mail@michaelsfonts.com">mail@michaelsfonts.com</a>
 </div>
@@ -212,24 +206,7 @@ const fonts = [
 
 const previewText = "The quick brown fox jumps over the lazy dog";
 
-const laZipCodes = [
-  "90012", // Chinatown / Civic Center
-  "90013", // Historic Core, DTLA
-  "90014", // Fashion District, DTLA
-  "90015", // South Park / LA Live, DTLA
-  "90021", // Arts District, DTLA
-  "90026", // Echo Park
-  "90027", // Los Feliz
-  "90029", // East Hollywood
-  "90039", // Silver Lake / Atwater
-  "90057", // Westlake / MacArthur Park
-  "90005", // Koreatown
-  "90006", // Koreatown / Pico-Union
-  "90010", // Koreatown / Wilshire Center
-  "90020", // Koreatown
-  "90031", // Lincoln Heights
-  "90033", // Boyle Heights
-];
+const laZipCodes = ["90012", "90013", "90014", "90015", "90021", "90026", "90027", "90029", "90039", "90057", "90005", "90006", "90010", "90020", "90031", "90033"];
 function randomZips(n) {
   return [...laZipCodes].sort(() => Math.random() - 0.5).slice(0, n).join("  ");
 }
@@ -328,7 +305,6 @@ function renderCategories() {
   });
   const categoryOrder = ['serif', 'sans-serif', 'numeral', 'variable', 'food', 'pixel', 'handwritten', 'fun', 'mashup'];
   const orderedCats = categoryOrder.filter(cat => counts[cat]);
-  // append any categories not in the predefined order
   Object.keys(counts).forEach(cat => { if (!orderedCats.includes(cat)) orderedCats.push(cat); });
   container.innerHTML = '<a href="#" class="' + (currentFilter.category === 'all' ? 'active' : '') + '" onclick="filterByCategory(\'all\'); return false;">all</a>' +
     orderedCats.map(cat =>
