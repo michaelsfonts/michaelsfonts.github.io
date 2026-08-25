@@ -357,11 +357,11 @@ function openDetail(index) {
     <div class="detail-designer">${f.license} &middot; ${f.variable ? 'variable' : f.styles + ' style' + (f.styles > 1 ? 's' : '')}</div>
     <div class="detail-preview" id="varPreview" style="font-family: ${f.family};">
       ${f.noAutocorrect
-        ? `<div class="detail-preview-input" id="varPreviewInput" contenteditable="true" spellcheck="false" autocorrect="off" autocapitalize="off" style="font-family: ${f.family};" onfocus="if(this.textContent==='${ph}')this.textContent=''" onblur="if(!this.textContent.trim())this.textContent='${ph}'" oninput="
+        ? `<div class="detail-preview-input" id="varPreviewInput" contenteditable="true" spellcheck="false" autocorrect="off" autocapitalize="off" data-placeholder="${ph}" style="font-family: ${f.family};" oninput="
           var el=this, sel=window.getSelection(), pos=sel.focusOffset, text=el.textContent;
           el.textContent=text;
           if(text){var range=document.createRange(); range.setStart(el.firstChild,Math.min(pos,text.length)); range.collapse(true); sel.removeAllRanges(); sel.addRange(range);}
-        ">${ph}</div>`
+        "></div>`
         : `<input class="detail-preview-input" id="varPreviewInput" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="off" style="font-family: ${f.family};" value="${ph}" onfocus="if(this.value==='${ph}')this.value=''" onblur="if(!this.value)this.value='${ph}'">`
       }
     </div>

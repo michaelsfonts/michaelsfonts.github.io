@@ -328,6 +328,12 @@ a:hover, a:active { text-decoration: none; }
   text-overflow: ellipsis;
 }
 
+.detail-panel .detail-preview-input[contenteditable]:empty::before {
+  content: attr(data-placeholder);
+  color: #888;
+  pointer-events: none;
+}
+
 .detail-info {
   font-size: 13px;
   line-height: 1.8;
