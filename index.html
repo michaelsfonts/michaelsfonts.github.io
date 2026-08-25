@@ -64,6 +64,7 @@ const fonts = [
     date: "Aug 22",
     desc: "All eyes. Type a few in a row and the pupil looks around as it goes.",
     tags: ["monospace", "wtf"],
+    noAutocorrect: true,
     buyLink: "https://michaelsfonts.com/downloads/WiggleMono-1.000.zip",
     buyNote: "Includes Regular · OTF + TTF + WOFF2 + WOFF · Desktop + web use · SIL OFL · source on GitHub"
   },
@@ -94,6 +95,7 @@ const fonts = [
     date: "Mar 31",
     desc: "A font that fixes your spelling. Try typing: definately, recieve, accomodate",
     tags: ["sans-serif"],
+    noAutocorrect: true,
     buyLink: "https://michaelsfonts.com/downloads/Autocorrect.zip",
     buyNote: "Includes Regular · TTF + WOFF2 · Desktop + web use · SIL OFL"
   },
@@ -325,8 +327,8 @@ function renderCategories() {
   });
   const categoryOrder = ['serif', 'sans-serif', 'numeral', 'variable', 'food', 'pixel', 'handwritten', 'fun', 'mashup'];
   const orderedCats = categoryOrder.filter(cat => counts[cat]);
-  // include any categories not in the predefined order (before handwritten)
-  Object.keys(counts).forEach(cat => { if (!orderedCats.includes(cat)) orderedCats.splice(orderedCats.length - 1, 0, cat); });
+  // append any categories not in the predefined order
+  Object.keys(counts).forEach(cat => { if (!orderedCats.includes(cat)) orderedCats.push(cat); });
   container.innerHTML = '<a href="#" class="' + (currentFilter.category === 'all' ? 'active' : '') + '" onclick="filterByCategory(\'all\'); return false;">all</a>' +
     orderedCats.map(cat =>
       '<a href="#" class="' + (currentFilter.category === cat ? 'active' : '') + '" onclick="filterByCategory(\'' + cat + '\'); return false;">' + cat + ' <span class="count">(' + counts[cat] + ')</span></a>'
@@ -354,13 +356,13 @@ function openDetail(index) {
     <h2>${f.name}</h2>
     <div class="detail-designer">${f.license} &middot; ${f.variable ? 'variable' : f.styles + ' style' + (f.styles > 1 ? 's' : '')}</div>
     <div class="detail-preview" id="varPreview" style="font-family: ${f.family};">
-      ${f.name === 'Autocorrect'
-        ? `<div class="detail-preview-input" id="varPreviewInput" contenteditable="true" spellcheck="false" autocorrect="off" autocapitalize="off" style="font-family: ${f.family};" onfocus="if(this.textContent==='Type something here...')this.textContent=''" onblur="if(!this.textContent.trim())this.textContent='Type something here...'" oninput="
+      ${f.noAutocorrect
+        ? `<div class="detail-preview-input" id="varPreviewInput" contenteditable="true" spellcheck="false" autocorrect="off" autocapitalize="off" style="font-family: ${f.family};" onfocus="if(this.textContent==='${ph}')this.textContent=''" onblur="if(!this.textContent.trim())this.textContent='${ph}'" oninput="
           var el=this, sel=window.getSelection(), pos=sel.focusOffset, text=el.textContent;
           el.textContent=text;
           if(text){var range=document.createRange(); range.setStart(el.firstChild,Math.min(pos,text.length)); range.collapse(true); sel.removeAllRanges(); sel.addRange(range);}
-        ">Type something here...</div>`
-        : `<input class="detail-preview-input" id="varPreviewInput" style="font-family: ${f.family};" value="${ph}" onfocus="if(this.value==='${ph}')this.value=''" onblur="if(!this.value)this.value='${ph}'">`
+        ">${ph}</div>`
+        : `<input class="detail-preview-input" id="varPreviewInput" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="off" style="font-family: ${f.family};" value="${ph}" onfocus="if(this.value==='${ph}')this.value=''" onblur="if(!this.value)this.value='${ph}'">`
       }
     </div>
     ${f.variable ? `
@@ -401,11 +403,19 @@ function openDetail(index) {
   `;
 
   document.getElementById('detailOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
 }
 
 function closeDetail() {
   document.getElementById('detailOverlay').classList.remove('active');
+  document.body.style.overflow = '';
 }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && document.getElementById('detailOverlay').classList.contains('active')) {
+    closeDetail();
+  }
+});
 
 renderCategories();
 updatePriceLinks();
