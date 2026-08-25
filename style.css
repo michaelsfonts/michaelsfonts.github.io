@@ -230,6 +230,18 @@ a:hover, a:active { text-decoration: none; }
   max-width: 100%;
 }
 
+/* Neutralize iOS/WebKit data-detector links (phone/zip/date) in previews,
+   which otherwise render numeric previews as blue underlined links. */
+.listing-preview a,
+.detail-preview a,
+.listing-preview a[x-apple-data-detectors],
+.detail-preview a[x-apple-data-detectors] {
+  color: inherit !important;
+  text-decoration: none !important;
+  -webkit-text-decoration: none !important;
+  pointer-events: none;
+}
+
 .listing-tags {
   margin-top: 4px;
   display: flex;
