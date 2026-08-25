@@ -328,6 +328,14 @@ a:hover, a:active { text-decoration: none; }
   text-overflow: ellipsis;
 }
 
+/* Placeholder for the contenteditable previews: shown only while empty and
+   not focused, so tapping in clears the text but keeps the blinking caret. */
+.detail-panel .detail-preview-input.is-empty:not(:focus)::before {
+  content: attr(data-placeholder);
+  color: #888;
+  pointer-events: none;
+}
+
 .detail-info {
   font-size: 13px;
   line-height: 1.8;

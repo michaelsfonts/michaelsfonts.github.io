@@ -64,6 +64,7 @@ const fonts = [
     date: "Aug 22",
     desc: "All eyes. Type a few in a row and the pupil looks around as it goes.",
     tags: ["monospace", "wtf"],
+    noAutocorrect: true,
     buyLink: "https://michaelsfonts.com/downloads/WiggleMono-1.000.zip",
     buyNote: "Includes Regular · OTF + TTF + WOFF2 + WOFF · Desktop + web use · SIL OFL · source on GitHub"
   },
@@ -94,6 +95,7 @@ const fonts = [
     date: "Mar 31",
     desc: "A font that fixes your spelling. Try typing: definately, recieve, accomodate",
     tags: ["sans-serif"],
+    noAutocorrect: true,
     buyLink: "https://michaelsfonts.com/downloads/Autocorrect.zip",
     buyNote: "Includes Regular · TTF + WOFF2 · Desktop + web use · SIL OFL"
   },
@@ -354,7 +356,10 @@ function openDetail(index) {
     <h2>${f.name}</h2>
     <div class="detail-designer">${f.license} &middot; ${f.variable ? 'variable' : f.styles + ' style' + (f.styles > 1 ? 's' : '')}</div>
     <div class="detail-preview" id="varPreview" style="font-family: ${f.family};">
-      <input class="detail-preview-input" id="varPreviewInput" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="off" style="font-family: ${f.family};" value="${ph}" onfocus="if(this.value==='${ph}')this.value=''" onblur="if(!this.value)this.value='${ph}'">
+      ${f.noAutocorrect
+        ? `<div class="detail-preview-input" id="varPreviewInput" contenteditable="true" spellcheck="false" autocorrect="off" autocapitalize="off" data-placeholder="${ph}" style="font-family: ${f.family};"></div>`
+        : `<input class="detail-preview-input" id="varPreviewInput" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="off" style="font-family: ${f.family};" value="${ph}" onfocus="if(this.value==='${ph}')this.value=''" onblur="if(!this.value)this.value='${ph}'">`
+      }
     </div>
     ${f.variable ? `
     <div class="variable-controls">
@@ -393,8 +398,46 @@ function openDetail(index) {
     ${f.buyNote ? `<div style="font-size: 12px; color: #888; margin-top: 8px;">${f.buyNote}</div>` : ''}
   `;
 
+  const editable = panel.querySelector('[contenteditable]');
+  if (editable) initPreviewField(editable);
+
   document.getElementById('detailOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
+}
+
+// Placeholder + caret handling for the contenteditable font previews.
+// Keeping an invisible zero-width space as a real text node means the caret
+// always has something to anchor to, so it shows on the first touch on mobile
+// (an empty contenteditable shows no caret on iOS). The placeholder itself is
+// drawn via CSS ::before and hidden on focus.
+const ZWSP = '​';
+function placeCaretEnd(el) {
+  const r = document.createRange();
+  r.selectNodeContents(el);
+  r.collapse(false);
+  const s = window.getSelection();
+  s.removeAllRanges();
+  s.addRange(r);
+}
+function setPreviewEmpty(el) {
+  el.textContent = ZWSP;
+  el.classList.add('is-empty');
+}
+function initPreviewField(el) {
+  setPreviewEmpty(el);
+  el.addEventListener('input', () => {
+    const text = el.textContent.split(ZWSP).join('');
+    if (text.length === 0) {
+      setPreviewEmpty(el);
+      placeCaretEnd(el);
+    } else {
+      if (el.textContent !== text) {
+        el.textContent = text;
+        placeCaretEnd(el);
+      }
+      el.classList.remove('is-empty');
+    }
+  });
 }
 
 function closeDetail() {
