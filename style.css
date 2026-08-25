@@ -328,7 +328,7 @@ a:hover, a:active { text-decoration: none; }
   text-overflow: ellipsis;
 }
 
-.detail-panel .detail-preview-input[contenteditable]:empty::before {
+.detail-panel .detail-preview-input[contenteditable]:empty:not(:focus)::before {
   content: attr(data-placeholder);
   color: #888;
   pointer-events: none;
