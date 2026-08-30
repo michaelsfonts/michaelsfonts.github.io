@@ -632,6 +632,13 @@ a:hover, a:active { text-decoration: none; }
 }
 
 @font-face {
+  font-family: 'Chemung Job';
+  src: url('ChemungJob/WOFF2/ChemungJob-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'Wiggle Mono';
   src: url('WiggleMono/WOFF2/WiggleMono-Regular.woff2') format('woff2');
   font-weight: 400;
