@@ -61,6 +61,7 @@ const fonts = [
     tags: ["monospace", "slab-serif"],
     previewText: "25c. LB. CHEAP METAL SORTS SOLD BOX AFTER BOX",
     inputDefault: "25c. LB. CHEAP METAL SORTS SOLD BOX AFTER BOX",
+    charset: ' "#$%&-.012356789:;ABCDEFGHIJKLMNOPQRSTUVWXabcdefg',
     buyLink: "https://michaelsfonts.com/downloads/ChemungJob-0.001.zip",
     buyNote: "Includes Regular · OTF + TTF + WOFF2 + WOFF · Desktop + web use · SIL OFL · source on GitHub"
   },
@@ -412,6 +413,30 @@ function openDetail(index) {
     ${f.price !== 0 ? `<div style="font-size: 12px; color: #888; margin-top: 8px;">After purchase, I will email you the font files.</div>` : `<div style="font-size: 12px; color: #888; margin-top: 8px;">Click to download the font files directly.</div>`}
     ${f.buyNote ? `<div style="font-size: 12px; color: #888; margin-top: 8px;">${f.buyNote}</div>` : ''}
   `;
+
+  if (f.charset) {
+    const inp = document.getElementById('varPreviewInput');
+    if (inp) {
+      const allowed = f.charset;
+      const clean = t => { let o = ''; for (const ch of t) o += allowed.indexOf(ch) >= 0 ? ch : ' '; return o; };
+      const isCE = inp.isContentEditable;
+      // sanitize the default value too
+      if (isCE) { inp.textContent = clean(inp.textContent); }
+      else { inp.value = clean(inp.value); }
+      inp.addEventListener('input', () => {
+        if (isCE) {
+          const sel = window.getSelection(), pos = sel.focusOffset, text = inp.textContent, c = clean(text);
+          if (c !== text) {
+            inp.textContent = c;
+            if (c) { const r = document.createRange(); r.setStart(inp.firstChild, Math.min(pos, c.length)); r.collapse(true); sel.removeAllRanges(); sel.addRange(r); }
+          }
+        } else {
+          const pos = inp.selectionStart, text = inp.value, c = clean(text);
+          if (c !== text) { inp.value = c; inp.setSelectionRange(pos, pos); }
+        }
+      });
+    }
+  }
 
   document.getElementById('detailOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
