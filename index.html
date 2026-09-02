@@ -420,7 +420,6 @@ function openDetail(index) {
       const allowed = f.charset;
       const clean = t => { let o = ''; for (const ch of t) o += allowed.indexOf(ch) >= 0 ? ch : ' '; return o; };
       const isCE = inp.isContentEditable;
-      // sanitize the default value too
       if (isCE) { inp.textContent = clean(inp.textContent); }
       else { inp.value = clean(inp.value); }
       inp.addEventListener('input', () => {

@@ -18,7 +18,6 @@ a { color: #0091D4; }
 a:visited { color: #0077ad; }
 a:hover, a:active { text-decoration: none; }
 
-/* ===== HEADER ===== */
 .header {
   border-bottom: 1px solid #bbb;
   box-shadow: 0 1px 0 rgba(255,255,255,0.5);
@@ -58,7 +57,6 @@ a:hover, a:active { text-decoration: none; }
   text-decoration: underline;
 }
 
-/* ===== SEARCH ===== */
 .search-bar {
   border-bottom: 1px solid #ccc;
   box-shadow: 0 1px 0 rgba(255,255,255,0.5);
@@ -118,7 +116,6 @@ a:hover, a:active { text-decoration: none; }
   text-decoration: none;
 }
 
-/* ===== CATEGORIES ===== */
 .categories {
   padding: 14px 24px;
   border-bottom: 1px solid #ccc;
@@ -152,7 +149,6 @@ a:hover, a:active { text-decoration: none; }
   font-size: 11px;
 }
 
-/* ===== FONT LISTING ===== */
 .listings {
   max-width: 900px;
   padding: 0 24px;
@@ -230,8 +226,6 @@ a:hover, a:active { text-decoration: none; }
   max-width: 100%;
 }
 
-/* Neutralize iOS/WebKit data-detector links (phone/zip/date) in previews,
-   which otherwise render numeric previews as blue underlined links. */
 .listing-preview a,
 .detail-preview a,
 .listing-preview a[x-apple-data-detectors],
@@ -267,7 +261,6 @@ a:hover, a:active { text-decoration: none; }
   color: #333;
 }
 
-/* ===== DETAIL PAGE (shown when clicking a font) ===== */
 .detail-overlay {
   display: none;
   position: fixed;
@@ -293,6 +286,7 @@ a:hover, a:active { text-decoration: none; }
   max-width: 700px;
   width: 100%;
   padding: 24px;
+  overflow: hidden;
 }
 
 .back-link {
@@ -403,7 +397,6 @@ a:hover, a:active { text-decoration: none; }
   color: #222;
 }
 
-/* ===== VARIABLE SLIDER ===== */
 .variable-controls {
   border: 1px solid #ddd;
   border-top-color: #e4e4e4;
@@ -450,7 +443,6 @@ a:hover, a:active { text-decoration: none; }
   color: #444;
 }
 
-/* ===== PAGE CONTENT (for standalone pages) ===== */
 .page-wrap {
   max-width: 700px;
   margin: 40px auto;
@@ -464,6 +456,7 @@ a:hover, a:active { text-decoration: none; }
   border-bottom-color: #b8b8b8;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   padding: 24px;
+  overflow: hidden;
 }
 
 .page-panel h2 {
@@ -471,7 +464,6 @@ a:hover, a:active { text-decoration: none; }
   margin-bottom: 4px;
 }
 
-/* ===== BLOG ===== */
 .blog-content {
   max-width: 700px;
   padding: 24px 24px 60px;
@@ -522,6 +514,7 @@ a:hover, a:active { text-decoration: none; }
   font-size: 14px;
   line-height: 1.8;
   color: #333;
+  overflow-wrap: anywhere;
 }
 
 .post-body p {
@@ -558,7 +551,6 @@ a:hover, a:active { text-decoration: none; }
   border-radius: 2px;
 }
 
-/* ===== FOOTER ===== */
 .footer {
   border-top: 1px solid #bbb;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
@@ -573,7 +565,6 @@ a:hover, a:active { text-decoration: none; }
   color: #888;
 }
 
-/* ===== FONT FACE ===== */
 @font-face {
   font-family: 'Pixel Caslon';
   src: url('PixelCaslon/WOFF2/PixelCaslon-Regular.woff2') format('woff2');
@@ -581,14 +572,12 @@ a:hover, a:active { text-decoration: none; }
   font-style: normal;
 }
 
-
 @font-face {
   font-family: 'Fart Nouveau';
   src: url('FartNouveau/WOFF2/FartNouveau.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
 }
-
 
 @font-face {
   font-family: 'Ricing';
