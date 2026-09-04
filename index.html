@@ -48,6 +48,23 @@
 <script>
 const fonts = [
   {
+    name: "CDG Karaoke",
+    designer: "Michael Seh",
+    family: "'CDG Karaoke', 'Times New Roman', serif",
+    category: "pixel",
+    price: 0,
+    license: "SIL Open Font License 1.1",
+    styles: 1,
+    variable: false,
+    date: "Sep 3",
+    desc: "A color pixel face redrawn from the lyric type on a CD+G karaoke disc. Words you have not sung yet are white, and each word fills in as you sing it. Music notes stay white. The demo plays a line from <a href='https://youtu.be/qnkuBUAwfe0?t=47'>Creed, One Last Breath</a>.",
+    tags: ["pixel", "color"],
+    previewText: "Hold me now I'm six feet from the edge and I'm thinking ♪",
+    inputDefault: "Hold me now I'm six feet from the edge and I'm thinking",
+    sync: [{ w: 3, ms: 2610 }, { w: 9, ms: 5000 }],
+    karaoke: true
+  },
+  {
     name: "Chemung Job",
     designer: "Michael Seh",
     family: "'Chemung Job', monospace",
@@ -63,7 +80,7 @@ const fonts = [
     inputDefault: "25c. LB. CHEAP METAL SORTS SOLD BOX AFTER BOX",
     charset: ' "#$%&-.012356789:;ABCDEFGHIJKLMNOPQRSTUVWXabcdefg',
     buyLink: "https://michaelsfonts.com/downloads/ChemungJob-0.001.zip",
-    buyNote: "Includes Regular · OTF + TTF + WOFF2 + WOFF · Desktop + web use · SIL OFL · source on GitHub"
+    buyNote: "Includes Regular · OTF + TTF + WOFF2 + WOFF · Desktop + web use · SIL OFL · <a href='https://github.com/michaelsfonts/Chemung-Job'>source on GitHub</a>"
   },
   {
     name: "S Tricky",
@@ -80,7 +97,7 @@ const fonts = [
     previewText: "Skip class, stay cool",
     inputDefault: "Skip class, stay cool",
     buyLink: "https://michaelsfonts.com/downloads/S-Tricky-1.0.0.zip",
-    buyNote: "Includes Regular · TTF + WOFF2 + WOFF · Desktop + web use · SIL OFL · source on GitHub"
+    buyNote: "Includes Regular · TTF + WOFF2 + WOFF · Desktop + web use · SIL OFL · <a href='https://github.com/michaelsfonts/S-Tricky'>source on GitHub</a>"
   },
   {
     name: "Wiggle Mono",
@@ -96,7 +113,7 @@ const fonts = [
     tags: ["monospace", "wtf"],
     noAutocorrect: true,
     buyLink: "https://michaelsfonts.com/downloads/WiggleMono-1.000.zip",
-    buyNote: "Includes Regular · OTF + TTF + WOFF2 + WOFF · Desktop + web use · SIL OFL · source on GitHub"
+    buyNote: "Includes Regular · OTF + TTF + WOFF2 + WOFF · Desktop + web use · SIL OFL · <a href='https://github.com/michaelsfonts/Wiggle-Mono'>source on GitHub</a>"
   },
   {
     name: "Stick On",
@@ -111,7 +128,7 @@ const fonts = [
     desc: "The stick-on vinyl numbers from the hardware store, turned into a font. A numeral font, 0–9. Monospaced, one slot per digit. Skinny 1, fat 8, same box.",
     tags: ["numeral", "monospace"],
     buyLink: "https://michaelsfonts.com/downloads/StickOn-v4.000.zip",
-    buyNote: "Numerals 0–9 · OTF + TTF + WOFF2 + WOFF · Desktop + web use · SIL OFL · source on GitHub"
+    buyNote: "Numerals 0–9 · OTF + TTF + WOFF2 + WOFF · Desktop + web use · SIL OFL · <a href='https://github.com/michaelsfonts/Stick-On'>source on GitHub</a>"
   },
   {
     name: "Autocorrect",
@@ -140,7 +157,7 @@ const fonts = [
     variable: false,
     date: "Mar 20",
     desc: "A display serif with an infestation. Small emoji icons attach themselves to letterforms at their most structurally vulnerable points. Hairline strokes, serif tips, terminals, and curve junctions all become host sites for digital organisms.",
-    tags: ["serif", "wtf"],
+    tags: ["serif", "color", "wtf"],
     buyLink: "https://michaelsfonts.com/downloads/FontLice-v1.0.zip",
     buyNote: "Includes Regular \u00b7 OTF + WOFF2 \u00b7 Desktop + web use \u00b7 SIL OFL"
   },
@@ -170,7 +187,7 @@ const fonts = [
     variable: false,
     date: "Mar 11",
     desc: "A color font based on EB Garamond where every glyph appears permanently text-selected. White letterforms on blue highlight rectangles.",
-    tags: ["serif"],
+    tags: ["serif", "color"],
     buyLink: "https://michaelsfonts.com/downloads/SelectAll-v1.2.zip",
     buyNote: "Includes Regular \u00b7 TTF + WOFF2 \u00b7 Desktop + web use \u00b7 SIL OFL"
   },
@@ -278,10 +295,10 @@ function renderListings() {
     <div class="listing${f.comingSoon ? ' coming-soon' : ''}" data-index="${fonts.indexOf(f)}"${f.comingSoon ? '' : ` onclick="openDetail(${fonts.indexOf(f)})"`}>
       <div class="listing-top">
         <div class="listing-title">${f.comingSoon ? f.name : `<a href="#" onclick="event.stopPropagation(); openDetail(${fonts.indexOf(f)}); return false;">${f.name}</a>`}</div>
-        ${f.comingSoon ? '<div class="listing-soon">coming soon</div>' : (f.price === 0 ? '<div class="listing-free">free</div>' : '<div class="listing-price">$' + f.price + '</div>')}
+        ${f.comingSoon ? '<div class="listing-soon">coming soon</div>' : (f.draft ? '<div class="listing-draft">draft</div>' : (f.price === 0 ? '<div class="listing-free">free</div>' : '<div class="listing-price">$' + f.price + '</div>'))}
         <div class="listing-meta">${f.date} &middot; ${f.comingSoon ? '? styles' : (f.variable ? 'variable' : f.styles + ' style' + (f.styles > 1 ? 's' : ''))}</div>
       </div>
-      <div class="listing-preview" style="font-family: ${f.family};${f.comingSoon ? ' opacity:0.4;' : ''}">${f.previewText || previewText}</div>
+      <div class="listing-preview${f.karaoke ? ' cdg-preview' : ''}" style="font-family: ${f.family};${f.comingSoon ? ' opacity:0.4;' : ''}">${f.previewText || previewText}</div>
       <div class="listing-tags">
         ${[...f.tags].sort((a, b) => {
           const priority = ['serif', 'sans-serif', 'variable'];
@@ -357,9 +374,156 @@ document.getElementById('searchInput').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') filterFonts();
 });
 
+function openKaraoke(f) {
+  const panel = document.getElementById('detailPanel');
+  const ph = f.inputDefault || '';
+  panel.innerHTML = `
+    <a href="#" class="back-link" onclick="closeDetail(); return false;">← back to fonts</a>
+    <h2>${f.name}</h2>${f.draft ? '<span class="detail-draft">draft</span>' : ''}
+    <div class="detail-designer">${f.license} &middot; color</div>
+    <div class="kbox" id="kbox">
+      <div class="kline" id="kline"><span class="kcursor" id="kcursor">♪</span></div>
+      <div class="khint" id="khint"></div>
+    </div>
+    <input class="k-sr" id="kInput" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Type to preview">
+    <div class="variable-controls">
+      <label>
+        <b>Sing</b>
+        <input type="range" id="wipeSlider" min="0" max="100" value="100">
+        <span class="val" id="wipeVal">100</span>
+      </label>
+      <button type="button" id="kPlay" class="kplay">▶ play</button>
+    </div>
+    <div class="detail-info">
+      ${f.desc}<br><br>
+      <span>Category:</span> ${f.category}<br>
+      <span>Type:</span> color (2 palettes)<br>
+      <span>License:</span> ${f.license}<br>
+      <span>Tags:</span> ${f.tags.join(', ')}
+    </div>
+    <div class="buy-section">
+      <a href="downloads/CDGKaraoke-1.000.zip" class="buy-btn free">Download free ↓</a>
+    </div>
+    <div style="font-size: 12px; color: #888; margin-top: 8px;">Includes Regular · OTF + TTF + WOFF2 + WOFF · Desktop + web use · SIL OFL · <a href="https://github.com/michaelsfonts/CDG-Karaoke">source on GitHub</a></div>
+  `;
+  initKaraoke(f);
+  document.getElementById('detailOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function initKaraoke(f) {
+  const input = document.getElementById('kInput');
+  const line = document.getElementById('kline');
+  const cursor = document.getElementById('kcursor');
+  const hint = document.getElementById('khint');
+  const kbox = document.getElementById('kbox');
+  const slider = document.getElementById('wipeSlider');
+  const wipeVal = document.getElementById('wipeVal');
+  const playBtn = document.getElementById('kPlay');
+  const NOTES = ["♩", "♪", "♫", "♬"];
+  let ni = 1;
+  if (window._kTimer) clearInterval(window._kTimer);
+  window._kTimer = setInterval(function () { ni = (ni + 1) % NOTES.length; cursor.textContent = NOTES[ni]; }, 480);
+
+  function chars() { return line.querySelectorAll('.kch'); }
+
+  function paint(sung) {
+    const c = chars(), n = c.length;
+    const b = Math.max(0, Math.min(n, Math.round(sung)));
+    for (let i = 0; i < n; i++) c[i].classList.toggle('unsung', i >= b);
+    if (b >= n) line.appendChild(cursor);
+    else line.insertBefore(cursor, c[b]);
+  }
+
+  function scrub() {
+    stop();
+    const n = chars().length;
+    paint(((+slider.value) / 100) * n);
+  }
+
+  function words() {
+    const v = input.value, w = [];
+    let i = 0;
+    while (i < v.length) {
+      while (i < v.length && v[i] === ' ') i++;
+      if (i >= v.length) break;
+      const s = i;
+      while (i < v.length && v[i] !== ' ') i++;
+      w.push([s, i]);
+    }
+    return w;
+  }
+
+  function stop() { if (window._kRaf) { cancelAnimationFrame(window._kRaf); window._kRaf = 0; } playBtn.textContent = "▶ play"; }
+
+  function syllables(word) {
+    const m = word.toLowerCase().replace(/[^a-z]/g, '').match(/[aeiouy]+/g);
+    return Math.max(1, m ? m.length : 1);
+  }
+
+  function play() {
+    const w = words(), n = chars().length, v = input.value;
+    if (!w.length) return;
+    const PER_SYL = 400;
+    let dur;
+    const segTotal = f.sync ? f.sync.reduce((a, s) => a + s.w, 0) : -1;
+    if (f.sync && segTotal === w.length) {
+      dur = [];
+      let wi = 0;
+      for (const s of f.sync) {
+        let tot = 0; const syl = [];
+        for (let k = 0; k < s.w; k++) { const y = syllables(v.slice(w[wi + k][0], w[wi + k][1])); syl.push(y); tot += y; }
+        for (let k = 0; k < s.w; k++) dur.push(s.ms * syl[k] / tot);
+        wi += s.w;
+      }
+    } else {
+      dur = w.map(seg => syllables(v.slice(seg[0], seg[1])) * PER_SYL);
+    }
+    const start = []; let acc = 0;
+    for (let i = 0; i < w.length; i++) { start.push(acc); acc += dur[i]; }
+    const total = acc, t0 = performance.now();
+    playBtn.textContent = "■ stop";
+    (function step(now) {
+      const t = now - t0;
+      if (t >= total) { paint(n); slider.value = 100; wipeVal.textContent = 100; stop(); return; }
+      let wi = 0; while (wi < w.length - 1 && t >= start[wi + 1]) wi++;
+      const seg = w[wi], frac = Math.min(1, (t - start[wi]) / dur[wi]);
+      const sung = seg[0] + frac * (seg[1] - seg[0]);
+      paint(sung);
+      slider.value = Math.round(sung / n * 100); wipeVal.textContent = slider.value;
+      window._kRaf = requestAnimationFrame(step);
+    })(t0);
+  }
+
+  function sync() {
+    stop();
+    const v = input.value;
+    const old = chars();
+    for (let k = 0; k < old.length; k++) old[k].remove();
+    for (let i = 0; i < v.length; i++) {
+      const s = document.createElement('span');
+      s.className = 'kch'; s.textContent = v[i];
+      line.insertBefore(s, cursor);
+    }
+    hint.style.display = v.length ? 'none' : 'block';
+    slider.value = 100; wipeVal.textContent = 100;
+    paint(v.length);
+  }
+
+  slider.addEventListener('input', function () { wipeVal.textContent = slider.value; scrub(); });
+  playBtn.addEventListener('click', function () { if (window._kRaf) stop(); else play(); });
+  input.addEventListener('input', sync);
+  input.addEventListener('keydown', function (e) { if (e.key === 'Escape') { e.stopPropagation(); input.value = ''; sync(); } });
+  kbox.addEventListener('mousedown', function (e) { e.preventDefault(); input.focus(); });
+  input.value = f.inputDefault || '';
+  sync();
+  setTimeout(function () { input.focus(); }, 100);
+}
+
 function openDetail(index) {
   const f = fonts[index];
   if (f.comingSoon) return;
+  if (f.karaoke) { openKaraoke(f); return; }
   const panel = document.getElementById('detailPanel');
   const ph = f.inputDefault || 'Type something here...';
 
@@ -442,6 +606,8 @@ function openDetail(index) {
 }
 
 function closeDetail() {
+  if (window._kTimer) { clearInterval(window._kTimer); window._kTimer = null; }
+  if (window._kRaf) { cancelAnimationFrame(window._kRaf); window._kRaf = 0; }
   document.getElementById('detailOverlay').classList.remove('active');
   document.body.style.overflow = '';
 }
